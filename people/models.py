@@ -7,8 +7,14 @@ class Person(models.Model):
     is_manager          = models.NullBooleanField()
     photo_number        = models.IntegerField(null=True)
 
+    def __str__(self):
+        return self.sam_account_name
+
 
 class Leave(models.Model):
     total       = models.IntegerField()
     days_left   = models.IntegerField()
     person_id   = models.ForeignKey(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.days_left

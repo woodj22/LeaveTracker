@@ -77,8 +77,11 @@ WSGI_APPLICATION = 'LeaveTracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.leave_tracker'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'leave_tracker',
+        'USER': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306'
     }
 }
 
