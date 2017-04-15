@@ -79,7 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'leave_tracker',
-        'USER': 'root',
+        'USER': 'django',
+        'PASSWORD': 'secret',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

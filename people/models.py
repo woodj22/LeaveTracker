@@ -11,10 +11,11 @@ class Person(models.Model):
         return self.sam_account_name
 
 
+
 class Leave(models.Model):
     total       = models.IntegerField()
     days_left   = models.IntegerField()
-    person_id   = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person   = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.days_left
