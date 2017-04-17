@@ -1,4 +1,6 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
+from rest_framework.response import Response
+
 from django.core import serializers
 from django.views import generic
 from django.shortcuts import get_object_or_404
@@ -11,18 +13,17 @@ from .models import Person
 
 
 class Index(APIView):
-
     def get(self, request, format=None):
         people = Person.objects.all()
         serializer = PersonSerializer(people, many=True)
-        return HttpResponse(serializer.data)
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = PersonSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return HttpResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return HttpResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class Show(viewsets.ModelViewSet):
