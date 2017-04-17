@@ -21,4 +21,6 @@ class Leave(models.Model):
     def __str__(self):
         return self.days_left
 
-
+class PhotoNumberRecord(models.Model):
+    person_id = models.IntegerField()
+    photo_number = models.IntegerField()

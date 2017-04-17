@@ -34,6 +34,5 @@ class ImportPeople(APIView):
             for row in reader:
                 Person.objects.get_or_create(
                     sam_account_name=row[0],
-                    photo_number=row['photo_number'],
                 )
         return Response([], status=status.HTTP_204_NO_CONTENT)
