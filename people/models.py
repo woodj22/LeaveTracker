@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Person(models.Model):
+    id                  = models.IntegerField(primary_key=True, null=False)
     sam_account_name    = models.CharField(max_length=200, unique=True)
     display_name        = models.CharField(max_length=200, null=True)
     is_manager          = models.NullBooleanField()
