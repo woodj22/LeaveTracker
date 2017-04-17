@@ -20,3 +20,5 @@ class Leave(models.Model):
 
     def __str__(self):
         return self.days_left
+
+

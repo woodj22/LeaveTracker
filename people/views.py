@@ -8,8 +8,9 @@ from rest_framework import viewsets
 from people.serializers import PersonSerializer
 from rest_framework.views import APIView
 from rest_framework import status
-
+import csv
 from .models import Person
+import os
 
 
 class Index(APIView):
@@ -25,14 +26,14 @@ class Index(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# class Show(viewsets.ModelViewSet):
-#     def get_queryset(self, account_name):
-#         person = get_object_or_404(Person, sam_account_name=account_name)
-#         return person
-#
-#     def get(self, request, account_name):
-#         person = self.get_queryset(account_name)
-#         serialized_obj = serializers.serialize('json', [person])
-#         return HttpResponse(serialized_obj, content_type='application/json')
-
+class ImportPeople(APIView):
+    def post(self, request):
+        filepath = request.data.get('path')
+        with open(filepath) as f:
+            reader = csv.reader(f)
+            for row in reader:
+                Person.objects.get_or_create(
+                    sam_account_name=row[0],
+                    photo_number=row['photo_number'],
+                )
+        return Response([], status=status.HTTP_204_NO_CONTENT)
