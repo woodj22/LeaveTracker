@@ -24,3 +24,4 @@ class Leave(models.Model):
 class PhotoNumberRecord(models.Model):
     person_id = models.IntegerField()
     photo_number = models.IntegerField()
+

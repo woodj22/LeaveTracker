@@ -26,13 +26,21 @@ class Index(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ImportPeople(APIView):
     def post(self, request):
         filepath = request.data.get('path')
         with open(filepath) as f:
-            reader = csv.reader(f)
+            reader = csv.DictReader(f)
             for row in reader:
+                if isinstance(row['photoNumber'], int):
+                    number = row['photoNumber']
+                    print(number)
+                else:
+                    number = 0
                 Person.objects.get_or_create(
-                    sam_account_name=row[0],
+                    sam_account_name=row['samAccountName'],
+                    photo_number=number
                 )
         return Response([], status=status.HTTP_204_NO_CONTENT)
+
