@@ -34,17 +34,10 @@ class ImportPeople(APIView):
         with open(filepath) as f:
             reader = csv.DictReader(f)
             for row in reader:
-                if row['photoNumber'] != 'NULL':
-                    number = int(row['photoNumber'])
-                else:
-                    number = None
-                Person.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
-                    sam_account_name=row['samAccountName'], defaults={
-                        'photo_number': number
-                    }
-                )
+                Person.addPersonFromCSV(row)
+
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
-   # def addPersonFromCsv(self):
+
 
 
