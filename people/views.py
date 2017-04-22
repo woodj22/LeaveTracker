@@ -38,9 +38,13 @@ class ImportPeople(APIView):
                     number = int(row['photoNumber'])
                 else:
                     number = None
-                Person.objects.where(sam_account_name=row['samAccountName']).get_or_create(
-                    sam_account_name=row['samAccountName'],
-                    photo_number=number
+                Person.objects.update_or_create(
+                    sam_account_name=row['samAccountName'], defaults={
+                        'photo_number': number
+                    }
                 )
         return Response([], status=status.HTTP_204_NO_CONTENT)
+
+   # def addPersonFromCsv(self):
+
 

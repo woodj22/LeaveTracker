@@ -11,9 +11,6 @@ class Person(models.Model):
     def __str__(self):
         return self.sam_account_name
 
-    def __int__(self):
-        return self.photo_number
-
 
 
 class Leave(models.Model):
