@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ef470841-c183-4f93-bbb3-19dd7192120b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/people/models.py" afterPath="$PROJECT_DIR$/people/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/people/views.py" afterPath="$PROJECT_DIR$/people/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -72,8 +71,8 @@
           <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/people/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
+                <state relative-caret-position="285">
+                  <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
@@ -134,8 +133,8 @@
         <option value="$PROJECT_DIR$/LeaveTracker/settings.py" />
         <option value="$PROJECT_DIR$/people/urls.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/people/models.py" />
         <option value="$PROJECT_DIR$/people/views.py" />
+        <option value="$PROJECT_DIR$/people/models.py" />
       </list>
     </option>
   </component>
@@ -889,14 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/people/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/people/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -904,6 +895,14 @@
           <folding>
             <element signature="e#0#81#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/people/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
