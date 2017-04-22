@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Person(models.Model):
-    id                  = models.IntegerField(primary_key=True, null=False)
+    id                  = models.AutoField(primary_key=True)
     sam_account_name    = models.CharField(max_length=200, unique=True)
     display_name        = models.CharField(max_length=200, null=True)
     is_manager          = models.NullBooleanField()
@@ -10,6 +10,9 @@ class Person(models.Model):
 
     def __str__(self):
         return self.sam_account_name
+
+    def __int__(self):
+        return self.photo_number
 
 
 

@@ -11,6 +11,7 @@ from rest_framework import status
 import csv
 from .models import Person
 import os
+import sys
 
 
 class Index(APIView):
@@ -28,17 +29,16 @@ class Index(APIView):
 
 
 class ImportPeople(APIView):
-    def post(self, request):
+    def post(self, request, format= None):
         filepath = request.data.get('path')
         with open(filepath) as f:
             reader = csv.DictReader(f)
             for row in reader:
-                if isinstance(row['photoNumber'], int):
-                    number = row['photoNumber']
-                    print(number)
+                if row['photoNumber'] != 'NULL':
+                    number = int(row['photoNumber'])
                 else:
-                    number = 0
-                Person.objects.get_or_create(
+                    number = None
+                Person.objects.where(sam_account_name=row['samAccountName']).get_or_create(
                     sam_account_name=row['samAccountName'],
                     photo_number=number
                 )
