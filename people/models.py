@@ -6,7 +6,7 @@ class Person(models.Model):
     sam_account_name    = models.CharField(max_length=200, unique=True)
     display_name        = models.CharField(max_length=200, null=True)
     is_manager          = models.NullBooleanField()
-    photo_number        = models.IntegerField(null=True)
+    photo_number        = models.BigIntegerField(null=True)
 
     def __str__(self):
         return self.sam_account_name

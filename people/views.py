@@ -29,7 +29,7 @@ class Index(APIView):
 
 
 class ImportPeople(APIView):
-    def post(self, request, format= None):
+    def post(self, request):
         filepath = request.data.get('path')
         with open(filepath) as f:
             reader = csv.DictReader(f)
@@ -38,7 +38,7 @@ class ImportPeople(APIView):
                     number = int(row['photoNumber'])
                 else:
                     number = None
-                Person.objects.update_or_create(
+                Person.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
                     sam_account_name=row['samAccountName'], defaults={
                         'photo_number': number
                     }
