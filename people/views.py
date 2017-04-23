@@ -9,6 +9,7 @@ from people.serializers import PersonSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 import csv
+import codecs
 from .models import Person
 import os
 import sys
@@ -30,11 +31,18 @@ class Index(APIView):
 
 class ImportPeople(APIView):
     def post(self, request):
-        filepath = request.data.get('path')
-        with open(filepath) as f:
-            reader = csv.DictReader(f)
+        if request.FILES:
+            filepath = request.FILES['csv']
+            reader = csv.DictReader(filepath)
             for row in reader:
                 Person.addPersonFromCSV(row)
+
+        if request.data.get('path'):
+            filepath = request.data.get('path')
+            with open(filepath) as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    Person.addPersonFromCSV(row)
 
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
