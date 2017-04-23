@@ -31,17 +31,17 @@ class Index(APIView):
 
 class ImportPeople(APIView):
     def post(self, request):
-        if request.FILES['csv']:
-            filepath = request.FILES['csv']
-            csv_file = csv.DictReader(filepath)
+        if request.FILES.get('csv'):
+            filepath = request.FILES.get('csv')
+            csv_dict = csv.DictReader(filepath)
 
         elif request.data.get('path'):
             filepath = request.data.get('path')
-            csv_file = csv.DictReader(open(filepath))
+            csv_dict = csv.DictReader(open(filepath))
 
-        Person.addPersonFromCSV(csv_file)
+        Person.addPeopleFromCSV(csv_dict)
 
-        return Response([], status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 

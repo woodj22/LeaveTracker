@@ -12,7 +12,7 @@ class Person(models.Model):
         return self.sam_account_name
 
     @classmethod
-    def addPersonFromCSV(cls, csv):
+    def addPeopleFromCSV(cls, csv):
         for row in csv:
             number = cls.__sanitizeCsvData(row)
             cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
