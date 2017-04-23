@@ -12,13 +12,14 @@ class Person(models.Model):
         return self.sam_account_name
 
     @classmethod
-    def addPersonFromCSV(cls, row):
-        number = cls.__sanitizeCsvData(row)
-        cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
-            sam_account_name=row['samAccountName'], defaults={
-                'photo_number': number
-            }
-        )
+    def addPersonFromCSV(cls, csv):
+        for row in csv:
+            number = cls.__sanitizeCsvData(row)
+            cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
+                sam_account_name=row['samAccountName'], defaults={
+                    'photo_number': number
+                }
+            )
 
     @classmethod
     def __sanitizeCsvData(cls, row):
