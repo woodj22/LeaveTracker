@@ -25,12 +25,13 @@ SECRET_KEY = '5mw!8s2cai_4h(f_uxz792(9xu^+gj9-!^0*tw5pic=^gx-!we'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'people.apps.PeopleConfig',
     'django.contrib.admin',
     'django.contrib.auth',
