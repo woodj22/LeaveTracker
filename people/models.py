@@ -35,6 +35,6 @@ class Leave(models.Model):
         return self.days_left
 
 class PhotoNumberRecord(models.Model):
-    person_id = models.IntegerField()
+    sam_account_name = models.CharField(max_length=200, unique=True)
     photo_number = models.IntegerField()
 

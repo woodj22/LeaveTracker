@@ -1,15 +1,14 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
 from rest_framework.response import Response
-
-from django.core import serializers
-from django.views import generic
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
 from people.serializers import PersonSerializer
 from rest_framework.views import APIView
 from rest_framework import status
+from django.apps import apps
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import APIException
+
 import csv
-import codecs
 from .models import Person
 import os
 import sys
@@ -31,6 +30,7 @@ class Index(APIView):
 
 class ImportPeople(APIView):
     def post(self, request):
+        table = request.data.get('tableModel')
         if request.FILES.get('csv'):
             filepath = request.FILES.get('csv')
             csv_dict = csv.DictReader(filepath)
@@ -39,10 +39,20 @@ class ImportPeople(APIView):
             filepath = request.data.get('path')
             csv_dict = csv.DictReader(open(filepath))
 
-        Person.addPeopleFromCSV(csv_dict)
+        try:
+            model = ContentType.objects.get(model=table)
+        except ObjectDoesNotExist:
+            raise TableNotFoundException(incorrect_table_model=table)
+
+        model = apps.get_model(app_label=model.app_label, model_name=table)
+        model.addPeopleFromCSV(csv_dict)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
+class TableNotFoundException(APIException):
+    def __init__(self, incorrect_table_model):
+        super().__init__(detail='the table: '+incorrect_table_model+' has not been found', code='NOT-FOUND_TABLE')
+        self.status_code = 400
+        self.get_codes()
+        self.get_full_details()
