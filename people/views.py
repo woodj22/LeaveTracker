@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
 from rest_framework.response import Response
-from people.serializers import PersonSerializer
+from people.serializers import PersonSerializer, ImportDataSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from django.apps import apps
@@ -30,7 +30,13 @@ class Index(APIView):
 
 class ImportPeople(APIView):
     def post(self, request):
+        serializer = ImportDataSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response('You do not have all the valid keys in the JSON recieved', status=status.HTTP_400_BAD_REQUEST)
+
         table = request.data.get('tableModel')
+
         if request.FILES.get('csv'):
             filepath = request.FILES.get('csv')
             csv_dict = csv.DictReader(filepath)
@@ -48,6 +54,12 @@ class ImportPeople(APIView):
         model.addPeopleFromCSV(csv_dict)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PhotoNumber(APIView):
+    def post(self, request):
+        filepath = request.data.get(':path')
+        csv_dict = csv.DictReader(open(filepath))
 
 
 class TableNotFoundException(APIException):

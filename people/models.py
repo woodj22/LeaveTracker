@@ -34,7 +34,9 @@ class Leave(models.Model):
     def __str__(self):
         return self.days_left
 
+
 class PhotoNumberRecord(models.Model):
     sam_account_name = models.CharField(max_length=200, unique=True)
     photo_number = models.IntegerField()
+
 
