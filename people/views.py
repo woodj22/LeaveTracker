@@ -56,11 +56,6 @@ class ImportPeople(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PhotoNumber(APIView):
-    def post(self, request):
-        filepath = request.data.get(':path')
-        csv_dict = csv.DictReader(open(filepath))
-
 
 class TableNotFoundException(APIException):
     def __init__(self, incorrect_table_model):
