@@ -70,6 +70,10 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'LeaveTracker.pagination.StandardResultsSetPagination'
+}
+
 WSGI_APPLICATION = 'LeaveTracker.wsgi.application'
 
 

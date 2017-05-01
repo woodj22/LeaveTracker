@@ -7,7 +7,7 @@ from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import APIException
-
+from django.core.paginator import Paginator
 import csv
 from .models import Person
 import os
@@ -17,6 +17,8 @@ import sys
 class Index(APIView):
     def get(self, request, format=None):
         people = Person.objects.all()
+        paginator = Paginator(people, 100)
+        people = paginator.page()
         serializer = PersonSerializer(people, many=True)
         return Response(serializer.data)
 
@@ -55,6 +57,10 @@ class ImportPeople(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class RetrievePhoto(APIView):
+       def get(self, request):
+           return Response('hello from RetrievePhoto')
 
 
 class TableNotFoundException(APIException):
