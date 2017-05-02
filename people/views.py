@@ -1,6 +1,7 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
-from people.serializers import PersonSerializer, ImportDataSerializer
+from people.serializers import PersonSerializer, ImportDataSerializer, PaginatedPersonSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from django.apps import apps
@@ -10,17 +11,22 @@ from rest_framework.exceptions import APIException
 from django.core.paginator import Paginator
 import csv
 from .models import Person
+
 import os
 import sys
 
 
 class Index(APIView):
+    pagination_class = LimitOffsetPagination
     def get(self, request, format=None):
-        people = Person.objects.all()
-        paginator = Paginator(people, 100)
-        page = request.QUERY_PARAMS.get('page')
+        query = Person.objects.all()
+        paginator = Paginator(query, 100)
+        page = request.data.get('page')
+        paginator = LimitOffsetPagination()
+        result_page = paginator.paginate_queryset(query, request)
 
-        serializer = PersonSerializer(people, many=True)
+        serializer = PersonSerializer(result_page, many=True)
+
         return Response(serializer.data)
 
     def post(self, request, format=None):
