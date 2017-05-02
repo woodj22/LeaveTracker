@@ -18,7 +18,8 @@ class Index(APIView):
     def get(self, request, format=None):
         people = Person.objects.all()
         paginator = Paginator(people, 100)
-        people = paginator.page()
+        page = request.QUERY_PARAMS.get('page')
+
         serializer = PersonSerializer(people, many=True)
         return Response(serializer.data)
 

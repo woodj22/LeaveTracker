@@ -71,7 +71,10 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'LeaveTracker.pagination.StandardResultsSetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'LeaveTracker.pagination.StandardResultsSetPagination',
+    'PAGINATE_BY': 10  ,
+    'PAGINATE_BY_PARAM': 'page_size', # Allow client to override, using `?page_size=xxx`.
+    'MAX_PAGINATE_BY': 100
 }
 
 WSGI_APPLICATION = 'LeaveTracker.wsgi.application'
