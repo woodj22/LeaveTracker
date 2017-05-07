@@ -1,7 +1,9 @@
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.decorators import api_view
+from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_404
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.response import Response
-from people.serializers import PersonSerializer, ImportDataSerializer, PaginatedPersonSerializer
+from people.serializers import PersonSerializer, ImportDataSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from django.apps import apps
@@ -12,22 +14,20 @@ from django.core.paginator import Paginator
 import csv
 from .models import Person
 
-import os
-import sys
 
+class Index(ListAPIView):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+    pagination_class = PageNumberPagination
+    page_size = 10
 
-class Index(APIView):
-    pagination_class = LimitOffsetPagination
-    def get(self, request, format=None):
-        query = Person.objects.all()
-        paginator = Paginator(query, 100)
-        page = request.data.get('page')
-        paginator = LimitOffsetPagination()
-        result_page = paginator.paginate_queryset(query, request)
+    def get(self, request):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return self.get_paginated_response(serializer.data)
 
-        serializer = PersonSerializer(result_page, many=True)
+    def get_queryset(self):
+        return Person.objects.all()
 
-        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = PersonSerializer(data=request.data)
@@ -76,3 +76,9 @@ class TableNotFoundException(APIException):
         self.status_code = 400
         self.get_codes()
         self.get_full_details()
+
+
+class StandardsResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 20
