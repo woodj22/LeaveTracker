@@ -1,7 +1,5 @@
-from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
-from rest_framework.decorators import api_view
-from rest_framework.generics import GenericAPIView, ListAPIView, get_object_or_404
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from people.serializers import PersonSerializer, ImportDataSerializer
 from rest_framework.views import APIView
@@ -10,7 +8,6 @@ from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import APIException
-from django.core.paginator import Paginator
 import csv
 from .models import Person
 
@@ -22,10 +19,6 @@ class Index(APIView):
         result_page = paginator.paginate_queryset(people, request)
         serializer = PersonSerializer(result_page, many=True, context={'data':request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def get_queryset(self):
-        return Person.objects.all()
-
 
     def post(self, request, format=None):
         serializer = PersonSerializer(data=request.data)
@@ -74,9 +67,3 @@ class TableNotFoundException(APIException):
         self.status_code = 400
         self.get_codes()
         self.get_full_details()
-
-
-class StandardsResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 20
