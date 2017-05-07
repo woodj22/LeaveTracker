@@ -15,15 +15,13 @@ import csv
 from .models import Person
 
 
-class Index(ListAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-    pagination_class = PageNumberPagination
-    page_size = 10
-
-    def get(self, request):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return self.get_paginated_response(serializer.data)
+class Index(APIView):
+    def get(self, request, format=None):
+        people = Person.objects.all()
+        paginator = LimitOffsetPagination()
+        result_page = paginator.paginate_queryset(people, request)
+        serializer = PersonSerializer(result_page, many=True, context={'data':request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         return Person.objects.all()
