@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Person(models.Model):
     id                  = models.AutoField(primary_key=True)
     sam_account_name    = models.CharField(max_length=200, unique=True)
@@ -20,6 +19,11 @@ class Person(models.Model):
             number = cls.__sanitizeCsvData(row)
             cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
                 sam_account_name=row['samAccountName'], defaults={
+                    'display_name':row['displayName'],
+                    'sur_name':row['surname'],
+                    'given_name':row['givenName'],
+                    'department':row['department'],
+                    'division':row['division'],
                     'photo_number': number
                 }
             )
