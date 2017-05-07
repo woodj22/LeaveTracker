@@ -7,7 +7,10 @@ class Person(models.Model):
     display_name        = models.CharField(max_length=200, null=True)
     is_manager          = models.NullBooleanField()
     photo_number        = models.BigIntegerField(null=True)
-
+    sur_name            = models.CharField(max_length=255)
+    given_name          = models.CharField(max_length=255)
+    department          = models.CharField(max_length=255)
+    division            = models.CharField(max_length=255)
     def __str__(self):
         return self.sam_account_name
 
