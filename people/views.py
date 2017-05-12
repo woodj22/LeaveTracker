@@ -10,8 +10,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import APIException
 import csv
 from .models import Person
-
-
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
+import json
 class Index(APIView):
     def get(self, request, format=None):
         people = Person.objects.all()
@@ -30,9 +31,9 @@ class Index(APIView):
 
 class ImportPeople(APIView):
     def post(self, request):
-        serializer = ImportDataSerializer(data=request.data)
+        import_serializer = ImportDataSerializer(data=request.data)
 
-        if not serializer.is_valid():
+        if not import_serializer.is_valid():
             return Response('You do not have all the valid keys in the JSON recieved', status=status.HTTP_400_BAD_REQUEST)
 
         table = request.data.get('tableModel')
@@ -43,15 +44,20 @@ class ImportPeople(APIView):
 
         elif request.data.get('path'):
             filepath = request.data.get('path')
-            csv_dict = csv.DictReader(open(filepath))
 
+            csv_dict = csv.DictReader(open(filepath))
         try:
             model = ContentType.objects.get(model=table)
         except ObjectDoesNotExist:
             raise TableNotFoundException(incorrect_table_model=table)
 
+        data = json.dumps(list(csv_dict))
+        # print(data)
+        person_serializer = PersonSerializer(data=csv_dict)
+        person_serializer.is_valid()
         model = apps.get_model(app_label=model.app_label, model_name=table)
-        model.addPeopleFromCSV(csv_dict)
+        print(person_serializer.data)
+        model.addPeopleFromCSV(person_serializer.validated_data)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 

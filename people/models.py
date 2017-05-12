@@ -15,8 +15,10 @@ class Person(models.Model):
 
     @classmethod
     def addPeopleFromCSV(cls, csv):
+        print(csv)
         for row in csv:
             number = cls.__sanitizeCsvData(row)
+
             cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
                 sam_account_name=row['samAccountName'], defaults={
                     # 'display_name':row['displayName'],
