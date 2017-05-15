@@ -66,23 +66,55 @@ class PhotoNumberRecord(models.Model):
     sam_account_name = models.CharField(max_length=200, unique=True)
     photo_number = models.IntegerField()
 
-class cms(models.Model):
-    sam
-HRNumber
-ExternalID
-PersonID
-LastName
-FirstName
-AffiliationID
-BuildingID
-VehicleRegNo	PinCode	ServicePartnerID
-CompanyName	CostCode
-SupervisorID
-HRNumber
-PersonnelOfficerCode
-Department
-Division
-CreationDate
-CreatedBy	ModifiedDate	ModifiedBy	IsArchived	LoginID	ExternalID	ExportFlag	IsInDiamond	SentryID
-FCWnxExportFlag	FCWnxLastExportDate
+class Cms(models.Model):
+    id = models.AutoField(primary_key=True)
+    HRNumber = models.CharField(max_length=200, unique=True)
+    ExternalID = models.CharField(max_length=200)
+    PersonID = models.BigIntegerField(null=True, blank=True)
+    LastName = models.CharField(max_length=200)
+    FirstName = models.CharField(max_length=200)
+    AffiliationID = models.CharField(max_length=200)
+    BuildingID = models.CharField(max_length=200)
+    VehicleRegNo = models.BigIntegerField(null=True, blank=True)
+    PinCode = models.BigIntegerField(null=True, blank=True)
+    ServicePartnerID = models.BigIntegerField(null=True, blank=True)
+    CompanyName = models.CharField(max_length=200)
+    CostCode = models.CharField(max_length=200)
+    SupervisorID = models.BigIntegerField(null=True, blank=True)
+    HRNumber = models.BigIntegerField(null=True, blank=True)
+    PersonnelOfficerCode = models.CharField(max_length=200)
+    Department = models.CharField(max_length=200)
+    Division = models.CharField(max_length=200)
+    CreationDate = models.BigIntegerField(null=True, blank=True)
+    CreatedBy = models.CharField(max_length=200)
+    ModifiedDate = models.BigIntegerField(null=True, blank=True)
+    ModifiedBy = models.BigIntegerField(null=True, blank=True)
+    IsArchived = models.BigIntegerField(null=True, blank=True)
+    LoginID = models.BigIntegerField(null=True, blank=True)
+    ExternalID = models.BigIntegerField(null=True, blank=True)
+    ExportFlag = models.CharField(max_length=200)
+    IsInDiamond = models.CharField(max_length=200)
+    SentryID = models.CharField(max_length=200)
+    FCWnxExportFlag = models.CharField(max_length=200)
+    FCWnxLastExportDate = models.CharField(max_length=200)
+
+    @classmethod
+    def addPeopleFromCSV(cls, csv):
+        for row in csv:
+            number = cls.__sanitizeCsvData(row)
+
+            cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
+                sam_account_name=row['samAccountName'], defaults={
+                    # 'display_name':row['displayName'],
+                    # 'sur_name':row['surname'],
+                    # 'given_name':row['givenName'],
+                    # 'department':row['department'],
+                    # 'division':row['division'],
+                    'photo_number': number
+                }
+            )
+
+    @classmethod
+    def __sanitizeCsvData(cls, row):
+        return int(row['photoNumber']) if row['photoNumber'] != 'NULL' else None
 
