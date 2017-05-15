@@ -44,20 +44,13 @@ class ImportPeople(APIView):
 
         elif request.data.get('path'):
             filepath = request.data.get('path')
-
             csv_dict = csv.DictReader(open(filepath))
         try:
             model = ContentType.objects.get(model=table)
         except ObjectDoesNotExist:
             raise TableNotFoundException(incorrect_table_model=table)
-
-        data = json.dumps(list(csv_dict))
-        # print(data)
-        person_serializer = PersonSerializer(data=csv_dict)
-        person_serializer.is_valid()
         model = apps.get_model(app_label=model.app_label, model_name=table)
-        print(person_serializer.data)
-        model.addPeopleFromCSV(person_serializer.validated_data)
+        model.addPeopleFromCSV(csv_dict)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 

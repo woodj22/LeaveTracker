@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Person(models.Model):
     id                  = models.AutoField(primary_key=True)
     sam_account_name    = models.CharField(max_length=200, unique=True)
@@ -15,8 +16,8 @@ class Person(models.Model):
 
     @classmethod
     def addPeopleFromCSV(cls, csv):
-        print(csv)
         for row in csv:
+
             number = cls.__sanitizeCsvData(row)
 
             cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
@@ -34,6 +35,23 @@ class Person(models.Model):
     def __sanitizeCsvData(cls, row):
         return int(row['photoNumber']) if row['photoNumber'] != 'NULL' else None
 
+    @classmethod
+    def __transform_data(cls, keys, inverse_map=False):
+        print(keys)
+        mapping = {
+            'sam_account_name': 'samAccountName',
+            'displayName': 'display_name',
+            'photoNumber': 'photo_number',
+            'surname': 'sur_name',
+            'givenName': 'given_name',
+            'department': 'department',
+            'division': 'division'
+            }
+
+        if inverse_map is True:
+            mapping={v: k for k, v in mapping.items()}
+
+        return mapping
 
 class Leave(models.Model):
     total       = models.IntegerField()
@@ -48,4 +66,23 @@ class PhotoNumberRecord(models.Model):
     sam_account_name = models.CharField(max_length=200, unique=True)
     photo_number = models.IntegerField()
 
+class cms(models.Model):
+    sam
+HRNumber
+ExternalID
+PersonID
+LastName
+FirstName
+AffiliationID
+BuildingID
+VehicleRegNo	PinCode	ServicePartnerID
+CompanyName	CostCode
+SupervisorID
+HRNumber
+PersonnelOfficerCode
+Department
+Division
+CreationDate
+CreatedBy	ModifiedDate	ModifiedBy	IsArchived	LoginID	ExternalID	ExportFlag	IsInDiamond	SentryID
+FCWnxExportFlag	FCWnxLastExportDate
 
