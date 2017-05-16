@@ -1,6 +1,9 @@
 
 # CHANGELOG
 
+### v0.1.1
+- Improve file upload to allow any csv to any database. 
+- Create CMS model and database
 
 ### v0.1.0
 
