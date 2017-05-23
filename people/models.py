@@ -3,12 +3,12 @@ from django.db import models
 
 class Person(models.Model):
     id                  = models.AutoField(primary_key=True)
-    sam_account_name    = models.CharField(max_length=200, unique=True)
-    display_name        = models.CharField(max_length=200, null=True, blank=True)
-    is_manager          = models.NullBooleanField(blank=True)
-    photo_number        = models.BigIntegerField(null=True, blank=True)
-    sur_name            = models.CharField(max_length=255, blank=True)
-    given_name          = models.CharField(max_length=255, blank=True)
+    samAccountName    = models.CharField(max_length=200, unique=True, db_column='sam_account_name')
+    displayName        = models.CharField(max_length=200, null=True, blank=True, db_column = 'display_name')
+    isManager          = models.NullBooleanField(blank=True,  db_column='is_manager')
+    photoNumber        = models.BigIntegerField(null=True, blank=True, db_column='photo_number')
+    surName            = models.CharField(max_length=255, blank=True, db_column='sur_name')
+    givenName          = models.CharField(max_length=255, blank=True, db_column='given_name')
     department          = models.CharField(max_length=255, blank=True)
     division            = models.CharField(max_length=255, blank=True)
     def __str__(self):
@@ -16,42 +16,19 @@ class Person(models.Model):
 
     @classmethod
     def addPeopleFromCSV(cls, csv):
-        for row in csv:
 
+        for row in csv:
+            print(row)
             number = cls.__sanitizeCsvData(row)
 
-            cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
-                sam_account_name=row['samAccountName'], defaults={
-                    # 'display_name':row['displayName'],
-                    # 'sur_name':row['surname'],
-                    # 'given_name':row['givenName'],
-                    # 'department':row['department'],
-                    # 'division':row['division'],
-                    'photo_number': number
-                }
+            cls.objects.filter(samAccountName=row['samAccountName']).update_or_create(
+                 samAccountName=row['samAccountName'], defaults=row
             )
 
     @classmethod
     def __sanitizeCsvData(cls, row):
         return int(row['photoNumber']) if row['photoNumber'] != 'NULL' else None
 
-    @classmethod
-    def __transform_data(cls, keys, inverse_map=False):
-        print(keys)
-        mapping = {
-            'sam_account_name': 'samAccountName',
-            'displayName': 'display_name',
-            'photoNumber': 'photo_number',
-            'surname': 'sur_name',
-            'givenName': 'given_name',
-            'department': 'department',
-            'division': 'division'
-            }
-
-        if inverse_map is True:
-            mapping={v: k for k, v in mapping.items()}
-
-        return mapping
 
 class Leave(models.Model):
     total       = models.IntegerField()
