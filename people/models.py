@@ -7,7 +7,7 @@ class Person(models.Model):
     displayName        = models.CharField(max_length=200, null=True, blank=True, db_column = 'display_name')
     isManager          = models.NullBooleanField(blank=True,  db_column='is_manager')
     photoNumber        = models.BigIntegerField(null=True, blank=True, db_column='photo_number')
-    surName            = models.CharField(max_length=255, blank=True, db_column='sur_name')
+    surname            = models.CharField(max_length=255, blank=True, db_column='sur_name')
     givenName          = models.CharField(max_length=255, blank=True, db_column='given_name')
     department          = models.CharField(max_length=255, blank=True)
     division            = models.CharField(max_length=255, blank=True)
@@ -18,16 +18,24 @@ class Person(models.Model):
     def addPeopleFromCSV(cls, csv):
 
         for row in csv:
-            print(row)
-            number = cls.__sanitizeCsvData(row)
-
+            default_values = cls.__sanitizeCsvData(row)
             cls.objects.filter(samAccountName=row['samAccountName']).update_or_create(
-                 samAccountName=row['samAccountName'], defaults=row
+                 samAccountName=row['samAccountName'], defaults=default_values
             )
 
     @classmethod
     def __sanitizeCsvData(cls, row):
-        return int(row['photoNumber']) if row['photoNumber'] != 'NULL' else None
+        sanatized_data = {
+            'samAccountName' : row['samAccountName'],
+            'displayName' : row['displayName'],
+            'photoNumber' : int(row['photoNumber']) if row['photoNumber'] != 'NULL' else None,
+            'surname' : row['surname'],
+            'givenName' : row['givenName'],
+            'department' : row['department'],
+            'division' : row['division'],
+
+        }
+        return sanatized_data
 
 
 class Leave(models.Model):
