@@ -17,15 +17,15 @@ class Person(models.Model):
     @classmethod
     def addPeopleFromCSV(cls, csv):
         for row in csv:
-            fieldnames = [f.name for f in cls._meta.get_fields(include_parents=False, include_hidden=True)]
+            fieldnames = [f.name for f in cls._meta.get_fields()]
             row = {k: row[k] for k in fieldnames if k in row}
-            default_values = cls.__sanitizeCsvData(row)
             cls.objects.filter(samAccountName=row['samAccountName']).update_or_create(
-                 samAccountName=row['samAccountName'], defaults=default_values
+                 samAccountName=row['samAccountName'], defaults=row
             )
 
     @classmethod
     def __sanitizeCsvData(cls, row):
+        exit(row)
         sanatized_data = {
             'samAccountName' : row['samAccountName'],
             'displayName' : row['displayName'],

@@ -1,6 +1,9 @@
 
 # CHANGELOG
 
+### v0.1.2
+- Import POST method now works with any csv containing relevant information for people.
+
 ### v0.1.1
 - Improve file upload to allow any csv to any database. 
 - Create CMS model and database

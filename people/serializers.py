@@ -7,8 +7,7 @@ from people.models import Person
 class PersonSerializer(serializers.ModelSerializer):
     serializer_field_mapping = {
         'sam_account_name': 'samAccountName',
-        # 'displayName': 'display_name',
-        # 'photoNumber': 'photo_number'
+
     }
     class Meta:
         model = Person
