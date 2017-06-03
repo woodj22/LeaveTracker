@@ -4,7 +4,7 @@ from django.db import models
 class Person(models.Model):
     id                  = models.AutoField(primary_key=True)
     samAccountName    = models.CharField(max_length=200, unique=True, db_column='sam_account_name')
-    displayName        = models.CharField(max_length=200, null=True, blank=True, db_column = 'display_name')
+    displayName        = models.CharField(max_length=200, null=True, blank=True, db_column='display_name')
     isManager          = models.NullBooleanField(blank=True,  db_column='is_manager')
     photoNumber        = models.BigIntegerField(null=True, blank=True, db_column='photo_number')
     surname            = models.CharField(max_length=255, blank=True, db_column='sur_name')
@@ -16,8 +16,9 @@ class Person(models.Model):
 
     @classmethod
     def addPeopleFromCSV(cls, csv):
-
         for row in csv:
+            fieldnames = [f.name for f in cls._meta.get_fields(include_parents=False, include_hidden=True)]
+            row = {k: row[k] for k in fieldnames if k in row}
             default_values = cls.__sanitizeCsvData(row)
             cls.objects.filter(samAccountName=row['samAccountName']).update_or_create(
                  samAccountName=row['samAccountName'], defaults=default_values
@@ -36,15 +37,6 @@ class Person(models.Model):
 
         }
         return sanatized_data
-
-
-class Leave(models.Model):
-    total       = models.IntegerField()
-    days_left   = models.IntegerField()
-    person      = models.ForeignKey(Person, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.days_left
 
 
 class PhotoNumberRecord(models.Model):
@@ -66,7 +58,6 @@ class Cms(models.Model):
     CompanyName = models.CharField(max_length=200)
     CostCode = models.CharField(max_length=200)
     SupervisorID = models.BigIntegerField(null=True, blank=True)
-    HRNumber = models.BigIntegerField(null=True, blank=True)
     PersonnelOfficerCode = models.CharField(max_length=200)
     Department = models.CharField(max_length=200)
     Division = models.CharField(max_length=200)
@@ -76,7 +67,6 @@ class Cms(models.Model):
     ModifiedBy = models.BigIntegerField(null=True, blank=True)
     IsArchived = models.BigIntegerField(null=True, blank=True)
     LoginID = models.BigIntegerField(null=True, blank=True)
-    ExternalID = models.BigIntegerField(null=True, blank=True)
     ExportFlag = models.CharField(max_length=200)
     IsInDiamond = models.CharField(max_length=200)
     SentryID = models.CharField(max_length=200)
@@ -86,18 +76,19 @@ class Cms(models.Model):
     @classmethod
     def addPeopleFromCSV(cls, csv):
         for row in csv:
+            print(row)
             number = cls.__sanitizeCsvData(row)
 
-            cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
-                sam_account_name=row['samAccountName'], defaults={
-                    # 'display_name':row['displayName'],
-                    # 'sur_name':row['surname'],
-                    # 'given_name':row['givenName'],
-                    # 'department':row['department'],
-                    # 'division':row['division'],
-                    'photo_number': number
-                }
-            )
+            # cls.objects.filter(sam_account_name=row['samAccountName']).update_or_create(
+            #     sam_account_name=row['samAccountName'], defaults={
+            #         # 'display_name':row['displayName'],
+            #         # 'sur_name':row['surname'],
+            #         # 'given_name':row['givenName'],
+            #         # 'department':row['department'],
+            #         # 'division':row['division'],
+            #         'photo_number': number
+            #     }
+            # )
 
     @classmethod
     def __sanitizeCsvData(cls, row):

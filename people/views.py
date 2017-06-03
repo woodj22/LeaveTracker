@@ -50,6 +50,7 @@ class ImportPeople(APIView):
         except ObjectDoesNotExist:
             raise TableNotFoundException(incorrect_table_model=table)
         model = apps.get_model(app_label=model.app_label, model_name=table)
+
         model.addPeopleFromCSV(csv_dict)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
